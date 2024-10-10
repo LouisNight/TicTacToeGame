@@ -9,13 +9,37 @@ New developers will often be asked to get up to speed on a project rapidly. It i
 1. Clone your GitHub Account's repo to your local machine.
 1. Now, take 15 minutes to get a big picture of the code in this application and its features.
     * Jot down notes here concerning: classes, objects, encapsulation, abstraction, inheritance, and polymorphism (i.e. if they are used, where they occur, etc.).
+    * 
+   ````
+   Encapsulation - The TicTacToe class encapsulates various parts of the game including the game layout, board, players and
+   overall game logic. 
+   
+   Inheritance - The TicTacToe class also uses inheritance. By extending Application, it inherits all the properties and methods from the
+   Application class in JavaFX.
+   
+   Polymorphism - An example of polymorphism in the code is in the use of the PlayerFactory class. The SENTIENT and COMPUTER player objects
+   behave differently but share the same interface
+   
+   Abstraction - Abstraction is present in the way the overall program code is structured. For example, the methods play, checkTie, and checkWinner
+   abstract game logic and make the system more modular. I think you could say that the PlayerFactory class also abstracts the creation of players.
+  * 
 1. Don’t be stuck for too long, if you don't understand a section jot it down below and move on.
     * Jot down part of the code you don't understand here.
     * I'd like each person to jot down at least 2 things unfamiliar to them.
+
+    ````
+   Two things I have a hard time understanding are the minimax algorithm and the PlayerFactory class.
+
 1. Now Take 5 minutes  and team up with one of your group members and take turns trying to explain what you’ve understood to someone else.
     * Ask if they can answer the items you jotted down in #2.
+
+
+
 1. Let's discuss as a class the items you still have questions about or are unfamiliar with.
     * Take notes here of things that became more clear after the class discussion.
+
+
+
 1. Commit & Push your README.md notes back to your origin and issue a Pull request to my instructor repo.
 1. Submit your Pull request URL to **Developer Skills Lab**
 

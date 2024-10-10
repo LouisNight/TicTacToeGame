@@ -1,5 +1,6 @@
 public class PlayerFactory {
     public enum PlayerTypes {
+
         COMPUTER("Computer"),
         SENTIENT("Sentient");
         private final String label;
@@ -11,9 +12,17 @@ public class PlayerFactory {
         }
     }
     public Player getPlayer(PlayerTypes playerType, String name, String marker, int turn){
+// if (playerType == null) {
+//    playerType = PlayerTypes.SENTIENT;
+//    return new Sentient("SENTIENT", "X", 0);
+//}
+        if (playerType == null) {
+            throw new NullPointerException("Player type is null");
+        }
+
         return switch (playerType) {
-            case COMPUTER -> new Computer(name, marker, turn);
-            case SENTIENT -> new Sentient(name, marker, turn);
-        };
-    }
+                case COMPUTER -> new Computer(name, marker, turn);
+                case SENTIENT -> new Sentient(name, marker, turn);
+            };
+        }
 }

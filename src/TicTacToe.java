@@ -22,7 +22,8 @@ public class TicTacToe extends Application {
     private int squares;
     private int squaresSquared;
     private int squaresPlayed = 0;
-    private int playerIdx = -1; // Initialize to -1 so that the first play starts at player 0
+    private int firstPlayerIndex = 0;
+    private int playerIdx; // Initialize to -1 so that the first play starts at player 0
     private ArrayList<Player> players;
     // Player types
     PlayerFactory playerFactory = new PlayerFactory();
@@ -105,6 +106,7 @@ public class TicTacToe extends Application {
             String name = tfPlayerName.getText();
             String marker = tfMarker.getText();
             int turn = this.players.size();
+
             this.players.add(
                     this.playerFactory.getPlayer(comboBox.getValue(), name, marker, turn));
             // Clear the menu components.
@@ -120,7 +122,7 @@ public class TicTacToe extends Application {
     }
 
     private void startOver() {
-        this.playerIdx = -1;
+        this.playerIdx = firstPlayerIndex - 1;
         this.squaresPlayed = 0;
         // Create Tic Tac Toe subview, and set it into the parent layout's center position, replacing the config
         // menu.
@@ -158,39 +160,45 @@ public class TicTacToe extends Application {
 
     public boolean checkWinner(int r, int c, String marker) {
         int col, row, diag, rdiag = diag = row = col = 0;
-        for(int i=0; i<this.squares; i++) {
-            if(((Button)this.gridPaneArray[r][i]).getText().equals(marker)) row++;
-            if(((Button)this.gridPaneArray[i][c]).getText().equals(marker)) col++;
-            if(((Button)this.gridPaneArray[i][i]).getText().equals(marker)) diag++;
-            if(((Button)this.gridPaneArray[i][this.squares - (i + 1)]).getText().equals(marker)) rdiag++;
+        for (int i = 0; i < this.squares; i++) {
+            if (((Button) this.gridPaneArray[r][i]).getText().equals(marker)) row++;
+            if (((Button) this.gridPaneArray[i][c]).getText().equals(marker)) col++;
+            if (((Button) this.gridPaneArray[i][i]).getText().equals(marker)) diag++;
+            if (((Button) this.gridPaneArray[i][this.squares - (i + 1)]).getText().equals(marker)) rdiag++;
         }
         return row == this.squares || col == this.squares || diag == this.squares || rdiag == this.squares;
     }
 
     private void announceWinner(Player current) {
         Alert a = new Alert(Alert.AlertType.INFORMATION);
-        if( current == null) { // implies a tie
+        if (current == null) { // implies a tie
             a.setTitle("We have a tie!!!");
             a.setContentText("Sorry no winner this time.");
         } else {
             a.setTitle("We have a winner!!!");
             a.setContentText(String.format("and the winner is %s", current.getName()));
         }
-        a.setOnCloseRequest((dialogEvent -> {this.startOver();}));
+        a.setOnCloseRequest((dialogEvent -> {
+            this.startOver();
+        }));
         a.show();
+    }
+
+    public int getFirstPlayerIndex() {
+        return this.firstPlayerIndex;
     }
 
     private GridPane createBoard() {
         GridPane board = new GridPane();
-        for(int r=0; r<this.squares; r++) {
+        for (int r = 0; r < this.squares; r++) {
             // Set this row size constraint
             RowConstraints rc = new RowConstraints();
             rc.setFillHeight(true);
             rc.setVgrow(Priority.ALWAYS);
             board.getRowConstraints().add(rc);
-            for(int c=0; c<this.squares; c++) {
+            for (int c = 0; c < this.squares; c++) {
                 // Set this column size constraints, but just once
-                if( r == 0) {
+                if (r == 0) {
                     ColumnConstraints cc = new ColumnConstraints();
                     cc.setFillWidth(true);
                     cc.setHgrow(Priority.ALWAYS);
@@ -201,12 +209,12 @@ public class TicTacToe extends Application {
                 square.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
                 square.setOnAction((event) -> {
                     // If this button is already marked give an illegal move notice.
-                    if(square.isAvailable()) {
+                    if (square.isAvailable()) {
                         // Mark this board button with the current players marker
                         Player current = this.players.get(this.playerIdx);
                         square.setText(current.getMarker());
                         // TODO: Check for winner here, and announce the winner before going to next player if there is one.
-                        if(checkTie()) {
+                        if (checkTie()) {
                             this.announceWinner(null);
                         } else if (checkWinner(square.getRow(), square.getCol(), current.getMarker())) {
                             this.announceWinner(current);
@@ -216,7 +224,7 @@ public class TicTacToe extends Application {
                         }
                     } else {
                         Alert a = new Alert(Alert.AlertType.ERROR);
-                        a. setTitle("Illegal Move!");
+                        a.setTitle("Illegal Move!");
                         a.setContentText("That square is already occupied.");
                         a.show();
                     }
@@ -232,8 +240,7 @@ public class TicTacToe extends Application {
 
     private void initializeGridPaneArray(GridPane board) {
         this.gridPaneArray = new Node[this.squares][this.squares];
-        for(Node node : board.getChildren())
-        {
+        for (Node node : board.getChildren()) {
             this.gridPaneArray[GridPane.getRowIndex(node)][GridPane.getColumnIndex(node)] = node;
         }
     }
